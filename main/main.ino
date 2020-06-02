@@ -28,6 +28,7 @@ void setup() {
   
   attachInterrupt(digitalPinToInterrupt(PIN_PHOTO), interruptPhoto, CHANGE);
   attachInterrupt(digitalPinToInterrupt(PIN_HALL), interruptHall, CHANGE);
+  pinMode(PIN_SWITCH, INPUT); 
 }
 
 int triggerPosition;
@@ -37,7 +38,9 @@ int lastCheckPosition; //Wird verwendet, damit die Berechnung nur einmal pro Seg
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  if (digitalRead(PIN_SWITCH) == 0){
+    return;
+  }
   if (triggerValid) {
     Serial.println("> Ausloesen...");     
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
@@ -68,7 +71,8 @@ void loop() {
         Serial.println("> Ausloesen vorbereitet!");
       }
       else {
-        Serial.println("> Ergebnis verworfen - Prüfe später erneut!");        
+        Serial.println("> Ergebnis verworfen - Prüfe später erneut!");     
+        triggerValid = false;   
       }
       lastCheckPosition = discmonitor.currentPosition;
       

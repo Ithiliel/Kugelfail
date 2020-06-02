@@ -13,10 +13,10 @@ void DiscMonitor::registerPhotoTransition() {
   segmentTimes[currentPosition] = curtime - lastImpulseMicros;
   lastImpulseMicros = curtime;
 
-  float rotspeed = 1000000.0 / segmentTimes[currentPosition];
-  float ratio = 0;
+  float rotspeed = 1000000.0 / (12*segmentTimes[currentPosition]);
+  float ratio = 0.0;
   if (oldtime != 0)
-    ratio = segmentTimes[currentPosition] / oldtime;
+    ratio = (float)segmentTimes[currentPosition] / (float)oldtime;
   
   Serial.print("Segment ");
   Serial.print(currentPosition);
