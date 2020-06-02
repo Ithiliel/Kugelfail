@@ -9,13 +9,23 @@ void DiscMonitor::registerPhotoTransition() {
     Serial.println("WARNUNG: Position passt nicht!"); //Sollte nur ein mal ganz am Anfang auftreten
   }
   unsigned long curtime = micros();
+  unsigned long oldtime = segmentTimes[currentPosition];
   segmentTimes[currentPosition] = curtime - lastImpulseMicros;
   lastImpulseMicros = curtime;
+
+  float rotspeed = 1000000.0 / segmentTimes[currentPosition];
+  float ratio = 0;
+  if (oldtime != 0)
+    ratio = segmentTimes[currentPosition] / oldtime;
   
   Serial.print("Segment ");
   Serial.print(currentPosition);
   Serial.print(" gerade verlassen (Dauer ");
   Serial.print(segmentTimes[currentPosition]);
+  Serial.print(", entspricht grob ");
+  Serial.print(rotspeed, 3);
+  Serial.print(" U/s, Vehaeltniss ");
+  Serial.print(ratio, 3);
   Serial.println(")");
   
   
