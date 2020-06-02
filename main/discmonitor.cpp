@@ -2,9 +2,9 @@
 #include <Arduino.h>
 
 // Bei jeder Flanke des Photosensors aufrufen
-void DiscMonitor::registerPhotoTransition() {
-  // ueberpruefen, ob Absolutposition stimmt
-  if (absEdgeRegistered && currentPosition != 0) {
+void DiscMonitor::registerPhotoTransition(bool currentHallState) {
+  // prüfe, ob Absolutposition stimmt, wenn Hallwert wechselt
+  if (!lastHallState && currentHallState && currentPosition != 0) {
     currentPosition = 0;
     Serial.println("WARNUNG: Position passt nicht!"); //Sollte nur ein mal ganz am Anfang auftreten
   }
@@ -30,16 +30,12 @@ void DiscMonitor::registerPhotoTransition() {
   
   
 
-  absEdgeRegistered = false;
+  lastHallState = currentHallState;
   currentPosition++;
   if (currentPosition == 12)
     currentPosition = 0;
 }
 
-// Aufrufen, wenn innerhalb des aktuellen Segmentes die Absolutpositionierung erkannt wird (Fallende Flanke HALL)
-void DiscMonitor::registerAbsolutePosition() {
-  absEdgeRegistered = true;
-}
 
 // Schätzt die Zeit, die das Segment segment in rev_ahead Umdrehung andauern wird
 // Rückgabewert null heißt: Keine Schätzung möglich

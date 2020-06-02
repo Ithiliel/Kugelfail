@@ -7,16 +7,7 @@ Servo servo;
 
 void interruptPhoto()
 {
-  discmonitor.registerPhotoTransition();
-}
-
-void interruptHall()
-{
-  Serial.println("Hall-interrupt!");
-  if (digitalRead(PIN_HALL) == 0) // In dem Segment, in dem das Loch unter dem Vereinzeler steht, gibt es eine fallende Flanke des Hallsensors (stimmt das?)
-  {
-    discmonitor.registerAbsolutePosition();
-  }
+  discmonitor.registerPhotoTransition(digitalRead(PIN_HALL) == 0);
 }
 
 
@@ -27,8 +18,8 @@ void setup() {
   Serial.println("Hej!");  
   
   attachInterrupt(digitalPinToInterrupt(PIN_PHOTO), interruptPhoto, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(PIN_HALL), interruptHall, CHANGE);
   pinMode(PIN_SWITCH, INPUT); 
+  pinMode(PIN_HALL, INPUT); 
 }
 
 int triggerPosition;
