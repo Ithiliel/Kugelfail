@@ -3,6 +3,7 @@
 
 // Bei jeder Flanke des Photosensors aufrufen
 void DiscMonitor::registerPhotoTransition() {
+  // ueberpruefen, ob Absolutposition stimmt
   if (absEdgeRegistered && currentPosition != 0) {
     currentPosition = 0;
     Serial.println("WARNUNG: Position passt nicht!"); //Sollte nur ein mal ganz am Anfang auftreten
