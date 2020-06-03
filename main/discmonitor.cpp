@@ -1,5 +1,6 @@
 #include "discmonitor.h"
 #include <Arduino.h>
+#include <math.h>
 
 // Bei jeder Flanke des Photosensors aufrufen
 void DiscMonitor::registerPhotoTransition(bool currentHallState) {
@@ -60,6 +61,25 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   long tdelay = DROPTARGETPOS * getExpectedSegmentTime(pos, 1) / 100;
   long droptime = DROPDELAY;
 
+  #if 0 //Hier auf 1 änern, um Durchschnittszeit zu verwenden
+  
+  unsigned long rottime = 0;
+  for (int i=0; i<12; i++) 
+    rottime += segmentTimes[i];
+    
+  //rottime = Dauer der letzten Umdrehung
+
+  float avrgSegmentTime = (float)rottime / 12.0;
+  float rotSegments = (float)droptime / avrgSegmentTime; //Anzahl der Segmente, die der Kugelfall dauert
+  int numSegments = ceil(rotSegments); //Aufrunden
+  pos -= numSegments;
+  while (pos < 0) pos += 12; //Normalisieren
+  
+  rot = ceil(numSegments / 12);
+  tdelay = numSegments * avrgSegmentTime;
+  
+  #else   
+
   while (droptime > tdelay) {
     Serial.print("        Segment ");
     Serial.print(pos);
@@ -81,6 +101,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
     }
     tdelay += segmentTime;
   }
+  #endif
  
   *segment = pos;
   *triggerdelay = tdelay - droptime;
