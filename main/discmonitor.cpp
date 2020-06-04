@@ -61,7 +61,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   long tdelay = DROPTARGETPOS * getExpectedSegmentTime(pos, 1) / 100;
   long droptime = DROPDELAY;
 
-  #if 0 //Hier auf 1 änern, um Durchschnittszeit zu verwenden
+  #if 0 //Hier auf 1 ändern, um Durchschnittszeit zu verwenden
   
   unsigned long rottime = 0;
   for (int i=0; i<12; i++) 
