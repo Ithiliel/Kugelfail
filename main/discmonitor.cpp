@@ -1,6 +1,7 @@
 #include "discmonitor.h"
 #include <Arduino.h>
 #include <math.h>
+#include <cmath>        
 
 // Bei jeder Flanke des Photosensors aufrufen
 void DiscMonitor::registerPhotoTransition(bool currentHallState) {
@@ -113,4 +114,20 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   Serial.print(" Trigger-Verzögerung ");
   Serial.println(*triggerdelay);
   return true;
+}
+
+// gibt die aktuelle Geschwindigkeit zurueck, gemittelt ueber x Segmente; bei vermutetem Fehler wird 0 zurueckgegeben
+float getSpeed(){
+	float sum = 0;
+	// Wenn die Abweichung der letzten beiden Segmente zu groß ist wird 0 zurückgegeben
+	if (abs(segmentTimes[segment]-segmentTimes[segment-1]) > 0.2*abs(segmentTimes[segment]){
+		return 0.0;
+	}
+	
+	// Summe der Zeit der letzten 12 Segmente
+	for(int i = 0; i<12 ; i++){
+		sum+=segmentTimes[i];
+	}
+	
+	return 1000000.0 / sum;
 }

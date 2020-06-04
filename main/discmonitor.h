@@ -15,6 +15,7 @@ class DiscMonitor
     void registerPhotoTransition(bool currentHallState); // verwurschteln des Photosensors, bekommt Hallsensorzustand übergeben
     unsigned long getExpectedSegmentTime(int segment, int rev_ahead); // geschaetzte Dauer des Segments
     bool getRecommendedTriggerPos(int *segment, unsigned long *triggerdelay); // Triggerposition bestimmen (wann soll die Kugel fallen gelassen werden)
+	float getSpeed(); // gemittelte aktuelle Geschwindigkeit
 
     volatile int currentPosition = 0; 	// Wirklich die derzeitige Position - also das Segment, das als nächstes verlassen wird
 										//Index Null = das Segment mit der Markierung der Absolutposition

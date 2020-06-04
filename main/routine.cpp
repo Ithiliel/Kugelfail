@@ -2,14 +2,3 @@
 #include <Arduino.h>
 
 
-void startFast(){
-	
-}
-
-void startMedium(){
-	
-}
-
-void startSlow(){
-	
-}

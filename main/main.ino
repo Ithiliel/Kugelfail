@@ -35,11 +35,10 @@ void loop() {
   if (triggerValid) {
     Serial.println("> Ausloesen...");     
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
-    Serial.println("> foo...");     
     unsigned long triggerTime = discmonitor.lastImpulseMicros + triggerDelay; //Summe Startzeit des richtigen Segmentes + empfolene Verzögerung = endgültige Auslösezeit
     while(micros() < triggerTime) {}; //Warte auf richtige Zeit
 
-  //hier!
+    //hier!
     // Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
     servo.write(20); 
     Serial.println("> Ausgeloest!");  
