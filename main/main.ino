@@ -13,7 +13,7 @@ void interruptPhoto()
 
 
 void setup() {
-  // put your setup code here, to run once:
+  // Initialisiere das Raumschiff
   Serial.begin(115200);
   servo.attach(9); 
   Serial.println("Hej!");  
@@ -29,7 +29,7 @@ int triggerValid; //Bestimmt, ob triggerPosition und triggerDelay gültig sind
 int lastCheckPosition; //Wird verwendet, damit die Berechnung nur einmal pro Segment ausgeführt wird
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // Haben Sie eine gültige Hyperraumgenehmigung?
   if (digitalRead(PIN_SWITCH) != 0) {
     return;
   }

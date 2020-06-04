@@ -116,7 +116,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   return true;
 }
 
-// gibt die aktuelle Geschwindigkeit zurueck, gemittelt ueber x Segmente; bei vermutetem Fehler wird 0 zurueckgegeben
+// gibt die aktuelle Geschwindigkeit zurueck, gemittelt über 12 Segmente; bei vermutetem Fehler (Abbremsen etc.) wird 0 zurückgegeben
 float getSpeed(){
 	float sum = 0;
 	// Wenn die Abweichung der letzten beiden Segmente zu groß ist wird 0 zurückgegeben
