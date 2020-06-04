@@ -5,7 +5,7 @@
 
 #define NUM_SEGMENTS 12 // Anzahl der schwarzen und weißen Segmente
 
-#define DROPDELAY 550000  // Gesamtverzögerung Auslösen - Aufprall in Microsekunden
+#define DROPDELAY 600000  // Gesamtverzögerung Auslösen - Aufprall in Microsekunden; Optimum 0: 650000
 #define DROPTARGETPOS 50  // Position des Abwurfzieles innerhalb des Segmentes in Prozent
 #define HOLEPOS 0 // Nummer des Segmentes mit dem Loch
 

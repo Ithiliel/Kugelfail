@@ -41,12 +41,12 @@ void DiscMonitor::registerPhotoTransition(bool currentHallState) {
 // Schätzt die Zeit, die das Segment segment in rev_ahead Umdrehung andauern wird
 // Rückgabewert null heißt: Keine Schätzung möglich
 unsigned long DiscMonitor::getExpectedSegmentTime(int segment, int rev_ahead) {
-  Serial.print("              Dumme Fallzeitschaetzung Position ");
+  /*Serial.print("              Dumme Fallzeitschaetzung Position ");
   Serial.print(segment);
   Serial.print(" Runde ");
   Serial.print(rev_ahead);
   Serial.print(" ==> ");
-  Serial.println(segmentTimes[segment]);
+  Serial.println(segmentTimes[segment]);*/
   // Hier sollte jetzt mit Hilfe eine Schätzung der Beschleunigung abgeschätzt werden, wie schnell die Scheibe dann noch ist
   return segmentTimes[segment];
 }
@@ -61,7 +61,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   long tdelay = DROPTARGETPOS * getExpectedSegmentTime(pos, 1) / 100;
   long droptime = DROPDELAY;
 
-  #if 0 //Hier auf 1 ändern, um Durchschnittszeit zu verwenden
+  #if 1 //Hier auf 1 ändern, um Durchschnittszeit zu verwenden
   
   unsigned long rottime = 0;
   for (int i=0; i<12; i++) 
@@ -70,7 +70,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   //rottime = Dauer der letzten Umdrehung
 
   float avrgSegmentTime = (float)rottime / 12.0;
-  float rotSegments = (float)droptime / avrgSegmentTime; //Anzahl der Segmente, die der Kugelfall dauert
+  float rotSegments = (float)droptime / avrgSegmentTime - 0.5; //Anzahl der Segmente, die der Kugelfall dauert
   int numSegments = ceil(rotSegments); //Aufrunden
   pos -= numSegments;
   while (pos < 0) pos += 12; //Normalisieren
@@ -81,14 +81,14 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   #else   
 
   while (droptime > tdelay) {
-    Serial.print("        Segment ");
-    Serial.print(pos);
-    Serial.print(" Runde ");
-    Serial.print(rot);
-    Serial.print(" Ist-Verzögerung ");
-    Serial.print(tdelay);
-    Serial.print(" Soll-Verzögerung ");
-    Serial.println(droptime);
+   // Serial.print("        Segment ");
+   // Serial.print(pos);
+   // Serial.print(" Runde ");
+   // Serial.print(rot);
+   // Serial.print(" Ist-Verzögerung ");
+   // Serial.print(tdelay);
+   // Serial.print(" Soll-Verzögerung ");
+   // Serial.println(droptime);
     pos -= 1;
     if (pos < 0)
       pos = 11;
