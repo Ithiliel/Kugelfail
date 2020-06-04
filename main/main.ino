@@ -29,21 +29,23 @@ int lastCheckPosition; //Wird verwendet, damit die Berechnung nur einmal pro Seg
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (digitalRead(PIN_SWITCH) == 0){
-    return;
-  }
+  
   if (triggerValid) {
     Serial.println("> Ausloesen...");     
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
     unsigned long triggerTime = discmonitor.lastImpulseMicros + triggerDelay; //Summe Startzeit des richtigen Segmentes + empfolene Verzögerung = endgültige Auslösezeit
     while(micros() < triggerTime) {}; //Warte auf richtige Zeit
 
-    // Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
-    servo.write(20); 
-    Serial.println("> Ausgeloest!");  
-    delay(200);
-    servo.write(50);
-    Serial.println("> Servo zurueckgefahren!");  
+    if (digitalRead(PIN_SWITCH) != 0) {
+      // Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
+      servo.write(20); 
+      Serial.println("> Ausgeloest!");  
+      delay(200);
+      servo.write(50);
+      Serial.println("> Servo zurueckgefahren!");  
+    } else {
+      Serial.println("> Würde auslösen!");
+    }
     triggerValid = false;
     lastCheckPosition = discmonitor.currentPosition;
     
