@@ -1,6 +1,7 @@
 #include <Servo.h> 
 #include "pindef.h"
 #include "discmonitor.h"
+#include "routine.h"
 
 DiscMonitor discmonitor;
 Servo servo;
@@ -37,16 +38,18 @@ void loop() {
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
     unsigned long triggerTime = discmonitor.lastImpulseMicros + triggerDelay; //Summe Startzeit des richtigen Segmentes + empfolene Verzögerung = endgültige Auslösezeit
     while(micros() < triggerTime) {}; //Warte auf richtige Zeit
-
-    //hier!
-    // Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
-    servo.write(20); 
-    Serial.println("> Ausgeloest!");  
-    delay(200);
-    servo.write(50);
-    Serial.println("> Servo zurueckgefahren!");  
-    triggerValid = false;
-    lastCheckPosition = discmonitor.currentPosition;
+	
+	// Bittet das Mutterschiff um Erlaubnis die Expedition zu starten
+    if (routine.goLittleBall(discmonitor.getSpeed())){
+		// Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
+		servo.write(20); 
+		Serial.println("> Ausgeloest!");  
+		delay(200);
+		servo.write(50);
+		Serial.println("> Servo zurueckgefahren!");  
+		triggerValid = false;
+		lastCheckPosition = discmonitor.currentPosition;
+	}
     
   }
   else {
