@@ -34,13 +34,17 @@ void loop() {
     return;
   }
   if (triggerValid) {
-    Serial.println("> Ausloesen...");     
+    Serial.println("> Ausloesen?");     
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
     unsigned long triggerTime = discmonitor.lastImpulseMicros + triggerDelay; //Summe Startzeit des richtigen Segmentes + empfolene Verzögerung = endgültige Auslösezeit
     while(micros() < triggerTime) {}; //Warte auf richtige Zeit
 	
 	// Bittet das Mutterschiff um Erlaubnis die Expedition zu starten
+	Serial.print("Geschwindigkeit:  ");
+	Serial.println(discmonitor.getSpeed());  
     if (routine.goLittleBall(discmonitor.getSpeed())){
+		Serial.println("> Erlaubnis erteilt!");     
+
 		// Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
 		servo.write(20); 
 		Serial.println("> Ausgeloest!");  

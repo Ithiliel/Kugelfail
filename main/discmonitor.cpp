@@ -120,7 +120,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
 float getSpeed(){
 	float sum = 0;
 	// Wenn die Abweichung der letzten beiden Segmente zu groß ist wird 0 zurückgegeben
-	if (abs(segmentTimes[segment]-segmentTimes[segment-1]) > 0.2*abs(segmentTimes[segment]){
+	if (abs(segmentTimes[segment]-segmentTimes[segment-1]) > 0.2*segmentTimes[segment]{
 		return 0.0;
 	}
 	
