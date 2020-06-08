@@ -7,6 +7,7 @@ bool goLittleBall(float speed){
 	if (speed != 0){
 		return true;
 	else
+		Serial.println("Houston, wir haben ein Problem!");
 		return false;
 	}
 	// hier Test-Ende
