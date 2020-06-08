@@ -1,7 +1,7 @@
 #include "discmonitor.h"
 #include <Arduino.h>
 #include <math.h>
-#include <cmath>        
+ 
 
 // Bei jeder Flanke des Photosensors aufrufen
 void DiscMonitor::registerPhotoTransition(bool currentHallState) {
@@ -20,7 +20,7 @@ void DiscMonitor::registerPhotoTransition(bool currentHallState) {
   if (oldtime != 0)
     ratio = (float)segmentTimes[currentPosition] / (float)oldtime;
   
-  Serial.print("Segment ");
+  /*Serial.print("Segment ");
   Serial.print(currentPosition);
   Serial.print(" gerade verlassen (Dauer ");
   Serial.print(segmentTimes[currentPosition]);
@@ -28,7 +28,7 @@ void DiscMonitor::registerPhotoTransition(bool currentHallState) {
   Serial.print(rotspeed, 3);
   Serial.print(" U/s, Vehaeltniss ");
   Serial.print(ratio, 3);
-  Serial.println(")");
+  Serial.println(")");*/
   
   
 
@@ -52,15 +52,28 @@ unsigned long DiscMonitor::getExpectedSegmentTime(int segment, int rev_ahead) {
   return segmentTimes[segment];
 }
 
+unsigned long DiscMonitor::getDropDelay() {
+  float speed = getSpeed();
+
+  if (speed > 2) 
+    return 495000; //Schnell
+
+  if (speed > 1.5) 
+    return 495000; //Mittel
+
+  return 450000;
+}
+
+
 //Ermittelt die Nummer des Segmentes, nach dessen Anfang eine Verzögerung von triggerdelay gestartet werden sollte, nach deren Ablauf ausgelöst werden sollte.
 //Der Rückgabewert sagt aus, ob das Ergebniss gültig ist
 bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerdelay) {
-  Serial.print("    Triggerzeitberechnung:");
+  //Serial.print("    Triggerzeitberechnung:");
   
   int pos = HOLEPOS;
   int rot = 1;
   long tdelay = DROPTARGETPOS * getExpectedSegmentTime(pos, 1) / 100;
-  long droptime = DROPDELAY;
+  long droptime = getDropDelay();
 
   #if 1 //Hier auf 1 ändern, um Durchschnittszeit zu verwenden
   
@@ -97,7 +110,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
       rot++;
     unsigned long segmentTime = getExpectedSegmentTime(pos, rot);
     if (segmentTime == 0) {
-        Serial.println("    Abbruch - Schaetzung ungueltig!");
+        //Serial.println("    Abbruch - Schaetzung ungueltig!");
         return false;
     }
     tdelay += segmentTime;
@@ -107,20 +120,25 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   *segment = pos;
   *triggerdelay = tdelay - droptime;
 
-  Serial.print("    Ergebniss: Segment ");
+  /*Serial.print("    Ergebniss: Segment ");
   Serial.print(pos);
   Serial.print(" Runde ");
   Serial.print(rot);
   Serial.print(" Trigger-Verzögerung ");
-  Serial.println(*triggerdelay);
+  Serial.println(*triggerdelay);*/
   return true;
 }
 
 // gibt die aktuelle Geschwindigkeit zurueck, gemittelt über 12 Segmente; bei vermutetem Fehler (Abbremsen etc.) wird 0 zurückgegeben
-float getSpeed(){
+float DiscMonitor::getSpeed(){
 	float sum = 0;
 	// Wenn die Abweichung der letzten beiden Segmente zu groß ist wird 0 zurückgegeben
-	if (abs(segmentTimes[segment]-segmentTimes[segment-1]) > 0.2*segmentTimes[segment]{
+ int lastKnownTimePos = currentPosition-1;
+ if (lastKnownTimePos < 0) lastKnownTimePos += 12;
+ int lastKnownTimePos2 = currentPosition-3;
+ if (lastKnownTimePos2 < 0) lastKnownTimePos2 += 12;
+ //Serial.println(abs(segmentTimes[lastKnownTimePos]-segmentTimes[lastKnownTimePos2])/segmentTimes[lastKnownTimePos]);
+ if (abs((float)segmentTimes[lastKnownTimePos]-(float)segmentTimes[lastKnownTimePos2]) > 0.15*segmentTimes[lastKnownTimePos]){
 		return 0.0;
 	}
 	

@@ -5,6 +5,7 @@
 
 DiscMonitor discmonitor;
 Servo servo;
+Routine routine;
 
 void interruptPhoto()
 {
@@ -21,6 +22,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(PIN_PHOTO), interruptPhoto, CHANGE);
   pinMode(PIN_SWITCH, INPUT); 
   pinMode(PIN_HALL, INPUT); 
+  servo.write(20);
 }
 
 int triggerPosition;
@@ -33,33 +35,38 @@ void loop() {
   if (digitalRead(PIN_SWITCH) != 0) {
     return;
   }
+  if (digitalRead(PIN_TRIGGER) != 0) {
+    routine.modus = 2;
+  }
   if (triggerValid) {
-    Serial.println("> Ausloesen?");     
+    //Serial.println("> Ausloesen?");     
     while(discmonitor.currentPosition != triggerPosition) {}; //Warte auf richtiges Segment
     unsigned long triggerTime = discmonitor.lastImpulseMicros + triggerDelay; //Summe Startzeit des richtigen Segmentes + empfolene Verzögerung = endgültige Auslösezeit
     while(micros() < triggerTime) {}; //Warte auf richtige Zeit
 	
 	// Bittet das Mutterschiff um Erlaubnis die Expedition zu starten
-	Serial.print("Geschwindigkeit:  ");
-	Serial.println(discmonitor.getSpeed());  
-    if (routine.goLittleBall(discmonitor.getSpeed())){
-		Serial.println("> Erlaubnis erteilt!");     
+	//Serial.print("Geschwindigkeit:  ");
+	//Serial.println(discmonitor.getSpeed());  
 
+  if (routine.goLittleBall(discmonitor.getSpeed())){
+		Serial.println("> Erlaubnis erteilt!");     
+    
 		// Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
-		servo.write(20); 
-		Serial.println("> Ausgeloest!");  
-		delay(200);
-		servo.write(50);
-		Serial.println("> Servo zurueckgefahren!");  
+		servo.write(50); 
+		//Serial.println("> Ausgeloest!");  
+		delay(300);
+		servo.write(20);
+		//Serial.println("> Servo zurueckgefahren!");  
+  }
 		triggerValid = false;
 		lastCheckPosition = discmonitor.currentPosition;
-	}
+
     
   }
   else {
     if (discmonitor.currentPosition != lastCheckPosition) {
-      Serial.print("> Pruefe - Jetzt in Segment ");
-      Serial.println(discmonitor.currentPosition);
+      //Serial.print("> Pruefe - Jetzt in Segment ");
+      //Serial.println(discmonitor.currentPosition);
       
       triggerValid = discmonitor.getRecommendedTriggerPos(&triggerPosition, &triggerDelay); //Pointer: Die Funktion schreibt ihre Erbenisse in unsere Variablen
       int nextPos = discmonitor.currentPosition + 1;
@@ -67,10 +74,10 @@ void loop() {
       
       if (triggerValid && triggerPosition == nextPos) { //Heißt: Wir erwarten noch eine Flanke, bis der Timer läuft und dann ausgelöst wird
         triggerValid = true;
-        Serial.println("> Ausloesen vorbereitet!");
+        //Serial.println("> Ausloesen vorbereitet!");
       }
       else {
-        Serial.println("> Ergebnis verworfen - Prüfe später erneut!");     
+        //Serial.println("> Ergebnis verworfen - Prüfe später erneut!");     
         triggerValid = false;   
       }
       lastCheckPosition = discmonitor.currentPosition;
