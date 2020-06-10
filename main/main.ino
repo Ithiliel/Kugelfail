@@ -1,10 +1,10 @@
-#include <Servo.h> 
+#include "servocontroller.h"
 #include "pindef.h"
 #include "discmonitor.h"
 #include "routine.h"
 
 DiscMonitor discmonitor;
-Servo servo;
+ServoController servocontroller;
 Routine routine;
 
 void interruptPhoto()
@@ -16,13 +16,12 @@ void interruptPhoto()
 void setup() {
   // Initialisiere das Raumschiff
   Serial.begin(115200);
-  servo.attach(9); 
+  servocontroller.init(); 
   Serial.println("Hej!");  
   
   attachInterrupt(digitalPinToInterrupt(PIN_PHOTO), interruptPhoto, CHANGE);
   pinMode(PIN_SWITCH, INPUT); 
   pinMode(PIN_HALL, INPUT); 
-  servo.write(20);
 }
 
 int triggerPosition;
@@ -31,6 +30,8 @@ int triggerValid; //Bestimmt, ob triggerPosition und triggerDelay gültig sind
 int lastCheckPosition; //Wird verwendet, damit die Berechnung nur einmal pro Segment ausgeführt wird
 
 void loop() {
+  routine.tick();
+  
   // Haben Sie eine gültige Hyperraumgenehmigung?
   if (digitalRead(PIN_SWITCH) != 0) {
     return;
@@ -52,10 +53,10 @@ void loop() {
 		Serial.println("> Erlaubnis erteilt!");     
     
 		// Schickt eine kühne Stahlkugel auf eine Reise ins Unbekannte.
-		servo.write(50); 
+		servocontroller.drop(); 
 		//Serial.println("> Ausgeloest!");  
 		delay(300);
-		servo.write(20);
+		servocontroller.reset();
 		//Serial.println("> Servo zurueckgefahren!");  
   }
 		triggerValid = false;

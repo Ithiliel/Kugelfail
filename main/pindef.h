@@ -12,7 +12,7 @@
 
 
 // Ausgaenge
-#define PIN_LED_GELB 12
-#define PIN_LED_GRUEN 13
+#define PIN_LED_YELLOW 12
+#define PIN_LED_GREEN 13
 
 #define PIN_SERVO 9

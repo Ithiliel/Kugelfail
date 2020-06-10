@@ -1,5 +1,14 @@
 #include "routine.h"
 #include <Arduino.h>
+#include "ledcontroller.h"
+
+void Routine::init(){
+  ledcontroller.init();
+}
+
+void Routine::tick(){
+  ledcontroller.tick();
+}
 
 
 bool Routine::goLittleBall(float speed){
@@ -11,12 +20,12 @@ bool Routine::goLittleBall(float speed){
 		return false;
 	}
 	// hier Test-Ende*/
-	// TODO LED
 	// Modus schnell
 	if (modus == 0){ 
     Serial.print("schnell: ");
     Serial.println(speed);
 		if (speed > 1.75 && speed < 2.5){ // wenn Geschwindigkeit == schnell
+      ledcontroller.setstates(on, on);
 
 			if (cnt > 4){ // dieser Fall solllte nicht auftreten, etwas ist schiefgegangen
 				Serial.print(cnt);
@@ -38,6 +47,7 @@ bool Routine::goLittleBall(float speed){
 				}
 			}			
 		} else { // falsche Geschwindigkeit
+      ledcontroller.setstates(blinking, blinking);
 			return false;
 		}
 		
@@ -45,6 +55,7 @@ bool Routine::goLittleBall(float speed){
 	} else if (modus == 1){ 
     Serial.print("mittel: ");
         Serial.println(speed);
+        ledcontroller.setstates(on, off);
 		if (speed > 1.0 && speed < 1.75){ // Geschwindigkeit == mittel
 		
 			if (cnt == 8){ // letzte Kugel
@@ -66,6 +77,7 @@ bool Routine::goLittleBall(float speed){
 				return false;
 			}
 		} else { // falsche Geschwindigkeit
+      ledcontroller.setstates(blinking, off);
 			return false;
 		}
 		
@@ -74,6 +86,7 @@ bool Routine::goLittleBall(float speed){
     Serial.print("langsam: ");
         Serial.println(speed);
 		if (speed > 0.25 && speed < 1.0){
+        ledcontroller.setstates(off, on);
 		
 			if (cnt == 2){ // letzte Kugel
 				cnt = 0;
@@ -90,6 +103,7 @@ bool Routine::goLittleBall(float speed){
 				}
 			}
 		} else { // falsche Geschwindigkeit
+      ledcontroller.setstates(off, blinking);
 			return false;
 		}
 		
