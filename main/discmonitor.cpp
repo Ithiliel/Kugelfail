@@ -132,7 +132,7 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
 // gibt die aktuelle Geschwindigkeit zurueck, gemittelt über 12 Segmente; bei vermutetem Fehler (Abbremsen etc.) wird 0 zurückgegeben
 float DiscMonitor::getSpeed(){
 	float sum = 0;
-	// Wenn die Abweichung der letzten beiden Segmente zu groß ist wird 0 zurückgegeben
+	// Wenn die Abweichung der letzten beiden gleichfarbigen Segmente zu groß ist wird 0 zurückgegeben
  int lastKnownTimePos = currentPosition-1;
  if (lastKnownTimePos < 0) lastKnownTimePos += 12;
  int lastKnownTimePos2 = currentPosition-3;
