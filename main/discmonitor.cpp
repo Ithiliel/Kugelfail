@@ -56,12 +56,18 @@ unsigned long DiscMonitor::getDropDelay() {
   float speed = getSpeed();
 
   if (speed > 2) 
-    return 495000; //Schnell
-
+    return 430000; //Schnell
+    
   if (speed > 1.5) 
-    return 495000; //Mittel
+    return 425000; //Mittel
+    
+  if (speed > 1.2) 
+    return 410000; //Mittel
 
-  return 450000;
+  if (speed > 0.8) 
+    return 390000;
+    
+  return 370000;
 }
 
 

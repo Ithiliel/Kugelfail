@@ -4,8 +4,8 @@
 // Definition der Pins
 #include "pindef.h"
 
-#define SERVO_DROPPOS 50
-#define SERVO_RESETPOS 20
+#define SERVO_DROPPOS 55
+#define SERVO_RESETPOS 40
 
 class ServoController
 {

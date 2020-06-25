@@ -21,8 +21,8 @@ servo.attach(9);
  
 // the loop function runs over and over again forever 
 void loop() { 
-servo.write(20); 
+servo.write(40); 
 while (digitalRead(4)==0){} 
-servo.write(50); 
+servo.write(55); 
 delay(1000); 
 }

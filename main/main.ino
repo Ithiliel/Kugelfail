@@ -17,6 +17,7 @@ void setup() {
   // Initialisiere das Raumschiff
   Serial.begin(115200);
   servocontroller.init(); 
+  routine.init();
   Serial.println("Hej!");  
   
   attachInterrupt(digitalPinToInterrupt(PIN_PHOTO), interruptPhoto, CHANGE);
@@ -37,7 +38,8 @@ void loop() {
     return;
   }
   if (digitalRead(PIN_TRIGGER) != 0) {
-    routine.modus = 2;
+    routine.modus = 1;
+    routine.cnt = 0;
   }
   if (triggerValid) {
     //Serial.println("> Ausloesen?");     
