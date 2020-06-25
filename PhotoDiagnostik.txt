@@ -1,0 +1,35 @@
+Hier steht die Drehscheibe so, dass der Phosensor mittig eines weißen Segmentes ist. Die Scheibe wird in dieser Position festgehalten
+
+15:18:00.079 -> Photosensor ist jetzt 0
+15:18:02.792 -> Servo auf
+15:18:03.788 -> Servo zu
+15:18:04.306 -> Servo auf
+15:18:05.305 -> Servo zu
+15:18:05.650 -> Servo auf
+15:18:06.679 -> Servo zu
+
+Nun haben wir die Scheibe so gedreht, dass der Photosensor mittig von einem schwarzen Segment ist. Auch hier bewegt sich die Scheibe nicht.
+
+15:18:10.654 -> Photosensor ist jetzt 1
+15:18:14.221 -> Servo auf
+15:18:15.248 -> Servo zu
+15:18:16.415 -> Servo auf
+15:18:16.553 -> Photosensor ist jetzt 0
+15:18:16.553 -> Photosensor ist jetzt 1
+15:18:17.407 -> Servo zu
+15:18:18.711 -> Servo auf
+15:18:18.848 -> Photosensor ist jetzt 0
+15:18:18.848 -> Photosensor ist jetzt 1
+15:18:19.706 -> Servo zu
+15:18:19.842 -> Photosensor ist jetzt 0
+15:18:19.874 -> Photosensor ist jetzt 1
+15:18:21.178 -> Servo auf
+15:18:21.316 -> Photosensor ist jetzt 1
+15:18:21.316 -> Photosensor ist jetzt 1
+15:18:22.173 -> Servo zu
+15:18:23.101 -> Servo auf
+15:18:23.238 -> Photosensor ist jetzt 0
+15:18:23.272 -> Photosensor ist jetzt 1
+15:18:24.097 -> Servo zu
+15:18:24.270 -> Photosensor ist jetzt 0
+15:18:24.270 -> Photosensor ist jetzt 1
