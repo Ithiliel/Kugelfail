@@ -15,12 +15,12 @@ void DiscMonitor::registerPhotoTransition(bool currentHallState) {
   segmentTimes[currentPosition] = curtime - lastImpulseMicros;
   lastImpulseMicros = curtime;
 
-  float rotspeed = 1000000.0 / (12*segmentTimes[currentPosition]);
+  /*float rotspeed = 1000000.0 / (12*segmentTimes[currentPosition]);
   float ratio = 0.0;
   if (oldtime != 0)
     ratio = (float)segmentTimes[currentPosition] / (float)oldtime;
   
-  /*Serial.print("Segment ");
+  Serial.print("Segment ");
   Serial.print(currentPosition);
   Serial.print(" gerade verlassen (Dauer ");
   Serial.print(segmentTimes[currentPosition]);
@@ -38,36 +38,8 @@ void DiscMonitor::registerPhotoTransition(bool currentHallState) {
     currentPosition = 0;
 }
 
-
-// Schätzt die Zeit, die das Segment segment in rev_ahead Umdrehung andauern wird
-// Rückgabewert null heißt: Keine Schätzung möglich
-unsigned long DiscMonitor::getExpectedSegmentTime(int segment, int rev_ahead) {
-  /*Serial.print("              Dumme Fallzeitschaetzung Position ");
-  Serial.print(segment);
-  Serial.print(" Runde ");
-  Serial.print(rev_ahead);
-  Serial.print(" ==> ");
-  Serial.println(segmentTimes[segment]);*/
-  // Hier sollte jetzt mit Hilfe eine Schätzung der Beschleunigung abgeschätzt werden, wie schnell die Scheibe dann noch ist
-  return segmentTimes[segment];
-}
-
 unsigned long DiscMonitor::getDropDelay() {
-  float speed = getSpeed();
-
-  if (speed > 2) 
-    return 430000; //Schnell
-    
-  if (speed > 1.5) 
-    return 425000; //Mittel
-    
-  if (speed > 1.2) 
-    return 410000; //Mittel
-
-  if (speed > 0.8) 
-    return 390000;
-    
-  return 370000;
+  return 420000;
 }
 
 
@@ -77,12 +49,8 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
   //Serial.print("    Triggerzeitberechnung:");
   
   int pos = HOLEPOS;
-  int rot = 1;
-  long tdelay = DROPTARGETPOS * getExpectedSegmentTime(pos, 1) / 100;
   long droptime = getDropDelay();
 
-  #if 1 //Hier auf 1 ändern, um Durchschnittszeit zu verwenden
-  
   unsigned long rottime = 0;
   for (int i=0; i<12; i++) 
     rottime += segmentTimes[i];
@@ -91,45 +59,16 @@ bool DiscMonitor::getRecommendedTriggerPos(int *segment, unsigned long *triggerd
 
   float avrgSegmentTime = (float)rottime / 12.0;
   float rotSegments = (float)droptime / avrgSegmentTime - 0.5; //Anzahl der Segmente, die der Kugelfall dauert
-  int numSegments = ceil(rotSegments); //Aufrunden
+  int numSegments = ceil(rotSegments); // Aufrunden
+  float segFraction = (float)numSegments - rotSegments; // Nachkommaanteil aus der Division
   pos -= numSegments;
   while (pos < 0) pos += 12; //Normalisieren
   
-  rot = ceil(numSegments / 12);
-  tdelay = numSegments * avrgSegmentTime;
-  
-  #else   
-
-  while (droptime > tdelay) {
-   // Serial.print("        Segment ");
-   // Serial.print(pos);
-   // Serial.print(" Runde ");
-   // Serial.print(rot);
-   // Serial.print(" Ist-Verzögerung ");
-   // Serial.print(tdelay);
-   // Serial.print(" Soll-Verzögerung ");
-   // Serial.println(droptime);
-    pos -= 1;
-    if (pos < 0)
-      pos = 11;
-    if (pos == HOLEPOS) //Wir sind einmal rum
-      rot++;
-    unsigned long segmentTime = getExpectedSegmentTime(pos, rot);
-    if (segmentTime == 0) {
-        //Serial.println("    Abbruch - Schaetzung ungueltig!");
-        return false;
-    }
-    tdelay += segmentTime;
-  }
-  #endif
- 
   *segment = pos;
-  *triggerdelay = tdelay - droptime;
+  *triggerdelay = segFraction * (float)avrgSegmentTime;
 
   /*Serial.print("    Ergebniss: Segment ");
   Serial.print(pos);
-  Serial.print(" Runde ");
-  Serial.print(rot);
   Serial.print(" Trigger-Verzögerung ");
   Serial.println(*triggerdelay);*/
   return true;

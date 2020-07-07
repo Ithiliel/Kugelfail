@@ -15,7 +15,7 @@ void interruptPhoto()
 
 void setup() {
   // Initialisiere das Raumschiff
-  Serial.begin(115200);
+  Serial.begin(2000000);
   servocontroller.init(); 
   routine.init();
   Serial.println("Hej!");  
